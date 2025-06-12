@@ -7,6 +7,7 @@ import group.sirenalertla.Repository.FireRepository;
 import group.sirenalertla.Repository.SirenRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -60,5 +61,36 @@ public class FireService {
         sirenRepo.saveAll(fire.getSirens());
 
         fireRepo.save(fire);
+    }
+
+    //_______ Ekstra funktioner______
+    /**/
+    //Slette en brand med ændring til dens relations
+    public void deleteFire(Long fireId) {
+        Fire fire = fireRepo.findById(fireId).orElseThrow();
+
+        // Skift sirenens status til FRED
+        fire.getSirens().forEach(s -> s.setStatus(Status.FRED));
+        sirenRepo.saveAll(fire.getSirens());
+
+        // Fjern relationen mellem brand og sirener
+        fire.getSirens().clear();
+        fireRepo.save(fire); // Opdatér ændringen
+        fireRepo.delete(fire); // Slet branden
+    }
+    //Slette alle brande før og med den valgt dag.
+    public void deleteFiresBeforeOrOn(LocalDate date) {
+        LocalDateTime endOfDay = date.atTime(23, 59, 59);
+
+        List<Fire> firesToDelete = fireRepo.findByTimeLessThanEqual(endOfDay);
+
+        for (Fire fire : firesToDelete) {
+            fire.getSirens().forEach(siren -> siren.setStatus(Status.FRED));
+            sirenRepo.saveAll(fire.getSirens());
+
+            fire.getSirens().clear();
+            fireRepo.save(fire);
+            fireRepo.delete(fire);
+        }
     }
 }
