@@ -36,4 +36,10 @@ public class FireController {
         fireService.closeFire(id);
         return ResponseEntity.noContent().build();
     }
+
+    //IDÉ Slet en brand?
+    /*
+    Hvis man vil se forrige slukket brandene,
+    så skal man ikke slette brande.
+     */
 }
