@@ -1,0 +1,16 @@
+Hvorfor skal HTML, CSS og JS
+i static mappen i stedet for at:
+HTML i Templates
+CSS i Static
+Javascript vides ikke i 2. semesteret.
+
+Det er fordi Static bruges til REN frontend med JS. (SPA-stil (Single Page App))
+- Man bruger jo ikke Thymeleaf eller server-side rendering(at tegne).
+- Man bruger jo JS Fetchs til at kalde på REST endpoints (fra Controller)
+Jeg bruger REST API og Javascript fetchs til at hente data fra backend (java delen)
+
+Man bruger Templates fordi:
+- Man bruger Thymeleaf i Spring til generere HTML med ${}-variabler.
+- Man har en controller-metode med return "index"; (Altså templates uden .html)
+- Derfor sætter man index.html i Templates og man skal have Thymeleaf dependency.
+- Intet fetch() - man henter data i controller og returnerer view.

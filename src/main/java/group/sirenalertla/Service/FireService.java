@@ -52,7 +52,7 @@ public class FireService {
     public List<Fire> getActiveFires() {
         return fireRepo.findByClosedFalse();
     }
-
+    // Slukker en brand og slå sirens fra
     public void closeFire(Long fireId) {
         Fire fire = fireRepo.findById(fireId).orElseThrow();
         fire.setClosed(true);

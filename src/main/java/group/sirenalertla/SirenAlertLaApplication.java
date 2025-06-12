@@ -20,17 +20,23 @@ public class SirenAlertLaApplication {
     @Bean
     CommandLineRunner initData(SirenRepository sirenRepo) {
         return args -> {
-            sirenRepo.save(Siren.builder().latitude(34.0195).longitude(-118.4912).status(Status.FRED).disabled(false).build()); // Santa Monica
-            sirenRepo.save(Siren.builder().latitude(34.0356).longitude(-118.5154).status(Status.FRED).disabled(false).build()); // Pacific Palisades
-            sirenRepo.save(Siren.builder().latitude(34.0230).longitude(-118.4950).status(Status.FRED).disabled(false).build()); // Santa Monica Pier
-            sirenRepo.save(Siren.builder().latitude(34.0255).longitude(-118.5000).status(Status.FRED).disabled(false).build()); // Ocean Park
-            sirenRepo.save(Siren.builder().latitude(34.0280).longitude(-118.5100).status(Status.FRED).disabled(false).build()); // Temescal Canyon
-            sirenRepo.save(Siren.builder().latitude(34.0320).longitude(-118.5125).status(Status.FRED).disabled(false).build()); // Chautauqua Blvd
-            sirenRepo.save(Siren.builder().latitude(34.0380).longitude(-118.5180).status(Status.FRED).disabled(false).build()); // Sunset Blvd
-            sirenRepo.save(Siren.builder().latitude(34.0300).longitude(-118.5050).status(Status.FRED).disabled(false).build()); // Montana Ave
-            sirenRepo.save(Siren.builder().latitude(34.0270).longitude(-118.5080).status(Status.FRED).disabled(false).build()); // 7th Street
-            sirenRepo.save(Siren.builder().latitude(33.923217).longitude(-117.707489).status(Status.FRED).disabled(false).build()); // Rolling M Ranch Campground
-            sirenRepo.save(Siren.builder().latitude(34.11105).longitude(-118.49).status(Status.FRED).disabled(false).build()); // TestPosition
+            // Indsætter test data ind i MySQL.
+            if (sirenRepo.count() == 0) {
+                sirenRepo.save(Siren.builder().latitude(34.0195).longitude(-118.4912).status(Status.FRED).disabled(false).build()); // Santa Monica
+                sirenRepo.save(Siren.builder().latitude(34.0356).longitude(-118.5154).status(Status.FRED).disabled(false).build()); // Pacific Palisades
+                sirenRepo.save(Siren.builder().latitude(34.0230).longitude(-118.4950).status(Status.FRED).disabled(false).build()); // Santa Monica Pier
+                sirenRepo.save(Siren.builder().latitude(34.0255).longitude(-118.5000).status(Status.FRED).disabled(false).build()); // Ocean Park
+                sirenRepo.save(Siren.builder().latitude(34.0280).longitude(-118.5100).status(Status.FRED).disabled(false).build()); // Temescal Canyon
+                sirenRepo.save(Siren.builder().latitude(34.0320).longitude(-118.5125).status(Status.FRED).disabled(false).build()); // Chautauqua Blvd
+                sirenRepo.save(Siren.builder().latitude(34.0380).longitude(-118.5180).status(Status.FRED).disabled(false).build()); // Sunset Blvd
+                sirenRepo.save(Siren.builder().latitude(34.0300).longitude(-118.5050).status(Status.FRED).disabled(false).build()); // Montana Ave
+                sirenRepo.save(Siren.builder().latitude(34.0270).longitude(-118.5080).status(Status.FRED).disabled(false).build()); // 7th Street
+                sirenRepo.save(Siren.builder().latitude(33.923217).longitude(-117.707489).status(Status.FRED).disabled(false).build()); // Rolling M Ranch Campground
+                sirenRepo.save(Siren.builder().latitude(34.11105).longitude(-118.49).status(Status.FRED).disabled(false).build()); // TestPosition
+                System.out.println("Testdata indsat");
+            } else {
+                System.out.println("Testdata allerede til stede. Springes over.");
+            }
         };
         /*
         Hvis man bruger :

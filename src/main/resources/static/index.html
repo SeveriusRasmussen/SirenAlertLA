@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Siren Alert LA</title>
+</head>
+<body>
+    <h1>Siren Alert LA</h1>
+
+    <nav>
+        <button onclick="showSection('sirens')">&#128508; Sirener</button> <!-- Sirens symbol -->
+        <button onclick="showSection('sirens')">&#128293; Brandene</button> <!-- Fire symbol -->
+        <button onclick="showSection('sirens')">&#128508; Sirener</button> <!-- ?? symbol -->
+    </nav>
+
+    <section id="sirens-section">
+        <h2>Alle Sirener</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Status</th>
+                    <th>Disabled</th>
+                    <th>Handlinger</th>
+                </tr>
+            </thead>
+            <tbody id="sirens-table-body"></tbody>
+        </table>
+
+        <h3>Opret / Opdatere Sirene</h3>
+        <form onsubmit="submitSiren(event)">
+            <input type="hidden" id="siren-id"> <!-- bruges til PUT -->
+            <label>Latitude: <input type="number" id="siren-lat" step="0.0001" required></label>
+            <label>Latitude: <input type="number" id="siren-lon" step="0.0001" required></label>
+            <label>Status:
+                <select id="siren-status">
+                    <option value="FRED">FRED</option>
+                    <option value="FARE">FARE</option>
+                </select>
+            </label><br>
+            <label>Disable:
+                <select id="siren-disabled">
+                    <option value="false">false</option>
+                    <option value="true">true</option>
+                </select>
+            </label><br>
+            <button type="submit">Gem Sirene</button>
+        </form>
+    </section>
+
+    <section id="fires-section" style="display:none;">
+        <h2>Aktive Brande</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Tidspunkt</th>
+                <th>Handlinger</th>
+            </tr>
+            </thead>
+            <tbody id="fires-table-body"></tbody>
+        </table>
+    </section>
+
+    <section id="simulate-section" style="display:none;">
+        <h2>Simulér Brand</h2>
+        <form onsubmit="createFire(event)">
+            <label>Latitude: <input type="number" step="0.0001" id="fire-lat" required></label><br>
+            <label>Longitude: <input type="number" step="0.0001" id="fire-lon" required></label><br>
+            <button type="submit">Aktivér brand</button>
+        </form>
+        <p id="fire-result"></p>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
