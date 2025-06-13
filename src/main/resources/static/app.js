@@ -22,7 +22,7 @@ function loadSirens() {
                     <td>${siren.disabled}</td>
                     <td>
                         <button onclick="editSiren(${siren.id}, ${siren.latitude}, ${siren.longitude}, '${siren.status}', ${siren.disabled})">Rediger</button>
-                        <button onclick="deleteSiren(${siren.id})">Slet</button>
+                        <button onclick="deleteSiren(${siren.id})" style="background-color: #ea0808">Slet</button>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -148,7 +148,7 @@ function loadFires() {
                     <td>${fire.longitude}</td>
                     <td>${time}</td>
                     <td>
-                        <button onclick="closeFire(${fire.id})">Luk</button>
+                        <button onclick="closeFire(${fire.id})" style="background-color: #ea0808">Luk</button>
                     </td>
                 `;
                 tbody.appendChild(row);
