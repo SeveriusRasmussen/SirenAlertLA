@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,16 +54,48 @@ public class FireService {
     public List<Fire> getActiveFires() {
         return fireRepo.findByClosedFalse();
     }
+
     // Slukker en brand og slå sirens fra
-    public void closeFire(Long fireId) {
-        Fire fire = fireRepo.findById(fireId).orElseThrow();
+    public Optional<Fire> closeFire(Long fireId) {
+        Optional<Fire> optionalFire = fireRepo.findById(fireId);
+
+        if (optionalFire.isEmpty()) return Optional.empty();
+
+        Fire fire = optionalFire.get();
         fire.setClosed(true);
+        fireRepo.save(fire); // Gemmer lukning
 
-        fire.getSirens().forEach(s -> s.setStatus(Status.FRED));
-        sirenRepo.saveAll(fire.getSirens());
+        // Tjek hver sirene tilknyttet denne brand
+        for (Siren siren : fire.getSirens()) {
 
-        fireRepo.save(fire);
+            // Find ud af om denne siren stadig er tæt på en anden aktiv brand.
+            boolean hasNearbyActiveFire = fireRepo.findAll().stream()
+                    .filter(f -> !f.isClosed())
+                    .filter(f -> !Objects.equals(f.getId(), fire.getId()))
+                    .anyMatch(f -> distanceService.calculateDistanceKM(
+                            f.getLatitude(), f.getLongitude(),
+                            siren.getLatitude(), siren.getLongitude()
+                    ) <= 10);
+            // Hvis ingen andre aktive brande -> sæt til FRED
+            if (!hasNearbyActiveFire) {
+                siren.setStatus(Status.FRED);
+            }
+        }
+
+        sirenRepo.saveAll(fire.getSirens()); // Gem ændringer på sirener
+
+        return Optional.of(fire);
     }
+    /*
+//    public void closeFire(Long fireId) {
+//        Fire fire = fireRepo.findById(fireId).orElseThrow();
+//        fire.setClosed(true);
+//
+//        fire.getSirens().forEach(s -> s.setStatus(Status.FRED));
+//        sirenRepo.saveAll(fire.getSirens());
+//
+//        fireRepo.save(fire);
+    } */
 
     //_______ Ekstra funktioner______
     /**/
