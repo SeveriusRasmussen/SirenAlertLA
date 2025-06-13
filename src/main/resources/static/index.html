@@ -9,12 +9,12 @@
     <h1>Siren Alert LA</h1>
 
     <nav>
-        <button onclick="showSection('sirens')">&#128508; Sirener</button> <!-- Sirens symbol -->
-        <button onclick="showSection('sirens')">&#128293; Brandene</button> <!-- Fire symbol -->
-        <button onclick="showSection('sirens')">&#128508; Sirener</button> <!-- ?? symbol -->
+        <button onclick="showSection('sirens')">&#128226; Sirener</button> <!-- Sirens symbol er en "Loudspeaker" -->
+        <button onclick="showSection('fires')">&#128293; Brande</button> <!-- Fire symbol er en "Fire"-->
+        <button onclick="showSection('simulate')">&#128165; Simulér Brand</button> <!-- Simulation symbol er en "Collision" -->
     </nav>
 
-    <section id="sirens-section">
+    <section id="sirens-section" style="display:none;">
         <h2>Alle Sirener</h2>
         <table>
             <thead>
@@ -29,26 +29,31 @@
             </thead>
             <tbody id="sirens-table-body"></tbody>
         </table>
-
-        <h3>Opret / Opdatere Sirene</h3>
-        <form onsubmit="submitSiren(event)">
-            <input type="hidden" id="siren-id"> <!-- bruges til PUT -->
-            <label>Latitude: <input type="number" id="siren-lat" step="0.0001" required></label>
-            <label>Latitude: <input type="number" id="siren-lon" step="0.0001" required></label>
-            <label>Status:
-                <select id="siren-status">
-                    <option value="FRED">FRED</option>
-                    <option value="FARE">FARE</option>
-                </select>
-            </label><br>
-            <label>Disable:
-                <select id="siren-disabled">
-                    <option value="false">false</option>
-                    <option value="true">true</option>
-                </select>
-            </label><br>
-            <button type="submit">Gem Sirene</button>
-        </form>
+        <button onclick="openSirenForm()">&#10133; Opret Sirene</button> <!-- Symbol for en Plus -->
+        <div id="siren-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSirenForm()">&times;</span>
+                <h3>Opret / Opdatere Sirene</h3>
+                <form onsubmit="submitSiren(event)">
+                    <input type="hidden" id="siren-id"> <!-- bruges til PUT -->
+                    <label>Latitude -90 to 90:<br> <input type="number" id="siren-lat" step="0.0000001" required></label><br> <!-- Skal skrive mellem -90 til 90 (Nord eller syd for Ækvator)-->
+                    <label>Longitude -180 to 180:<br> <input type="number" id="siren-lon" step="0.0000001" required></label><br> <!-- Skal skrive mellem -180 til 180 (Vest eller Øst for London)-->
+                    <label>Status:
+                        <select id="siren-status">
+                            <option value="FRED">FRED</option>
+                            <option value="FARE">FARE</option>
+                        </select>
+                    </label><br>
+                    <label>Disable:
+                        <select id="siren-disabled">
+                            <option value="false">false</option>
+                            <option value="true">true</option>
+                        </select>
+                    </label><br>
+                    <button type="submit">Gem Sirene</button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <section id="fires-section" style="display:none;">
@@ -65,13 +70,29 @@
             </thead>
             <tbody id="fires-table-body"></tbody>
         </table>
+        <!-- Knap til at åbne modal -->
+        <button onclick="openDeleteModal()">&#128465; Slet alle brande før valgt dato</button>
+        <!-- Modal -->
+        <div id="delete-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h3>Slet alle brande før dato</h3>
+                <form onsubmit="deleteFiresBeforeDate(event)">
+                    <label>Vælg dato:
+                        <input type="date" id="delete-date" required>
+                    </label><br><br>
+                    <button type="submit">Slet</button>
+                </form>
+                <p id="delete-date-result"></p>
+            </div>
+        </div>
     </section>
 
     <section id="simulate-section" style="display:none;">
         <h2>Simulér Brand</h2>
         <form onsubmit="createFire(event)">
-            <label>Latitude: <input type="number" step="0.0001" id="fire-lat" required></label><br>
-            <label>Longitude: <input type="number" step="0.0001" id="fire-lon" required></label><br>
+            <label>Latitude: <input type="number" step="0.0000001" id="fire-lat" required></label><br>
+            <label>Longitude: <input type="number" step="0.0000001" id="fire-lon" required></label><br>
             <button type="submit">Aktivér brand</button>
         </form>
         <p id="fire-result"></p>
